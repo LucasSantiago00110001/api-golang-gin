@@ -1,0 +1,77 @@
+definitions:
+  posts.ListResponse:
+    properties:
+      page:
+        type: integer
+      registros:
+        items:
+          $ref: '#/definitions/posts.Post'
+        type: array
+      total:
+        type: integer
+    type: object
+  posts.Post:
+    properties:
+      fk_user_id:
+        type: integer
+      id:
+        type: integer
+      message:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /health:
+    get:
+      description: |-
+        API do Sannockit.
+        Retorna o estado atual da API.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Verifica a saúde da API
+      tags:
+      - health
+  /posts:
+    get:
+      description: Retorna os posts da página solicitada. Se page não for informada,
+        utiliza 1.
+      parameters:
+      - default: 1
+        description: Número da página
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/posts.ListResponse'
+        "400":
+          description: Parâmetro page inválido
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erro ao listar posts
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Lista posts
+      tags:
+      - posts
+swagger: "2.0"
